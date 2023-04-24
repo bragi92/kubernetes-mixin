@@ -104,7 +104,7 @@
           {
             record: 'node:windows_node_memory_swap_io_pages:irate',
             expr: |||
-              irate(windows_memory_swap_page_operations_total{%(windowsExporterSelector)s}[5m])
+              irate(windows_memory_swap_page_operations_total{%(windowsExporterSelector)s}[1m])
             ||| % $._config,
           },
           {
@@ -180,37 +180,37 @@
           {
             record: 'windows_pod_container_available',
             expr: |||
-              windows_container_available{%(windowsExporterSelector)s} * on(container_id) group_left(container, pod, namespace) max(kube_pod_container_info{%(kubeStateMetricsSelector)s}) by(container, container_id, pod, namespace)
+              windows_container_available{%(windowsExporterSelector)s, container_id != ""} * on(container_id) group_left(container, pod, namespace) max(kube_pod_container_info{%(kubeStateMetricsSelector)s}) by(container, container_id, pod, namespace)
             ||| % $._config,
           },
           {
             record: 'windows_container_total_runtime',
             expr: |||
-              windows_container_cpu_usage_seconds_total{%(windowsExporterSelector)s} * on(container_id) group_left(container, pod, namespace) max(kube_pod_container_info{%(kubeStateMetricsSelector)s}) by(container, container_id, pod, namespace)
+              windows_container_cpu_usage_seconds_total{%(windowsExporterSelector)s, container_id != ""} * on(container_id) group_left(container, pod, namespace) max(kube_pod_container_info{%(kubeStateMetricsSelector)s}) by(container, container_id, pod, namespace)
             ||| % $._config,
           },
           {
             record: 'windows_container_memory_usage',
             expr: |||
-              windows_container_memory_usage_commit_bytes{%(windowsExporterSelector)s} * on(container_id) group_left(container, pod, namespace) max(kube_pod_container_info{%(kubeStateMetricsSelector)s}) by(container, container_id, pod, namespace)
+              windows_container_memory_usage_commit_bytes{%(windowsExporterSelector)s, container_id != ""} * on(container_id) group_left(container, pod, namespace) max(kube_pod_container_info{%(kubeStateMetricsSelector)s}) by(container, container_id, pod, namespace)
             ||| % $._config,
           },
           {
             record: 'windows_container_private_working_set_usage',
             expr: |||
-              windows_container_memory_usage_private_working_set_bytes{%(windowsExporterSelector)s} * on(container_id) group_left(container, pod, namespace) max(kube_pod_container_info{%(kubeStateMetricsSelector)s}) by(container, container_id, pod, namespace)
+              windows_container_memory_usage_private_working_set_bytes{%(windowsExporterSelector)s, container_id != ""} * on(container_id) group_left(container, pod, namespace) max(kube_pod_container_info{%(kubeStateMetricsSelector)s}) by(container, container_id, pod, namespace)
             ||| % $._config,
           },
           {
             record: 'windows_container_network_received_bytes_total',
             expr: |||
-              windows_container_network_receive_bytes_total{%(windowsExporterSelector)s} * on(container_id) group_left(container, pod, namespace) max(kube_pod_container_info{%(kubeStateMetricsSelector)s}) by(container, container_id, pod, namespace)
+              windows_container_network_receive_bytes_total{%(windowsExporterSelector)s, container_id != ""} * on(container_id) group_left(container, pod, namespace) max(kube_pod_container_info{%(kubeStateMetricsSelector)s}) by(container, container_id, pod, namespace)
             ||| % $._config,
           },
           {
             record: 'windows_container_network_transmitted_bytes_total',
             expr: |||
-              windows_container_network_transmit_bytes_total{%(windowsExporterSelector)s} * on(container_id) group_left(container, pod, namespace) max(kube_pod_container_info{%(kubeStateMetricsSelector)s}) by(container, container_id, pod, namespace)
+              windows_container_network_transmit_bytes_total{%(windowsExporterSelector)s, container_id != ""} * on(container_id) group_left(container, pod, namespace) max(kube_pod_container_info{%(kubeStateMetricsSelector)s}) by(container, container_id, pod, namespace)
             ||| % $._config,
           },
           {
@@ -245,7 +245,7 @@
             record: 'namespace_pod_container:windows_container_cpu_usage_seconds_total:sum_rate',
             expr: |||
               sum by (namespace, pod, container) (
-                rate(windows_container_total_runtime{}[5m])
+                rate(windows_container_total_runtime{}[1m])
               )
             ||| % $._config,
           },
